@@ -47,7 +47,7 @@ angular.module("ionic-fancy-select", ["ionic"])
       scope.checkedProperty = attrs.checkedProperty || "checked";
       scope.iconProperty = attrs.iconProperty || "icon";
       scope.textProperty = attrs.textProperty || "text";
-      scope.valueProperty = attrs.valueProperty || "id";
+      scope.valueProperty = attrs.valueProperty;
 
       // The modal properties
       scope.modalTemplateUrl = attrs.modalTemplateUrl;
