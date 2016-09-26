@@ -18,7 +18,7 @@ angular.module("ionic-fancy-select", ["ionic"])
       if (attrs.templateUrl) {
         return "<ng-include src=\"'" + attrs.templateUrl + "'\"></ng-include>";
       } else {
-        return '<label ng-click=showItems($event) class="item item-input item-floating-label"><span class="input-label select-label {{inputLabelCss}}">{{label}}</span><div class="{{textCss}}">{{text}}</div></label>'
+        return '<label ng-click=showItems($event) class="item item-input item-floating-label"><span class="input-label select-label {{inputLabelCss}}">{{label}}</span><div class="{{textCss}}">{{text || label}}</div></label>'
         // <ion-item ng-click=showItems($event)> <ion-label floating>{{label}}</ion-label> {{text}} <span class=item-note>{{noteText}} <img class={{noteImgClass}} ng-if="noteImg != null" src="{{noteImg}}"/> </span> </ion-item>';
       }
     },
@@ -43,7 +43,7 @@ angular.module("ionic-fancy-select", ["ionic"])
       // Text displayed on label
       scope.label = attrs.label || '';
       scope.text = attrs.text || '';
-      scope.defaultText = attrs.text || attrs.label;
+      scope.defaultText = attrs.text || '';
 
       // Data binding properties
       scope.checkedProperty = attrs.checkedProperty || "checked";
@@ -110,7 +110,7 @@ angular.module("ionic-fancy-select", ["ionic"])
         }
 
         var text = "";
-        if (temp.length) {
+        if (temp.length && temp[0]) {
           // Concatenate the list of selected items
           angular.forEach(scope.items, function(item, key) {
             for (var i = 0; i < temp.length; i++) {
@@ -138,7 +138,9 @@ angular.module("ionic-fancy-select", ["ionic"])
       
       // Raised by watch when the value changes
       scope.onValueChanged = function(newValue, oldValue) {
-        if(newValue.length > 0)
+       
+        console.log(newValue);
+        if(newValue != "")
         {
           scope.inputLabelCss = "has-input";
           scope.textCss = "select-text";
@@ -147,7 +149,9 @@ angular.module("ionic-fancy-select", ["ionic"])
           scope.inputLabelCss = "";
           scope.textCss = "select-placeholder";
         }
+
         scope.text = scope.getText(newValue);
+        console.log(scope.text);
         
         // Notify subscribers that the value has changed
         scope.valueChangedCallback({value: newValue});
@@ -211,4 +215,3 @@ angular.module("ionic-fancy-select", ["ionic"])
 
 ;
 }());
-
