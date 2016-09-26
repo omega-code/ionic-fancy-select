@@ -18,7 +18,8 @@ angular.module("ionic-fancy-select", ["ionic"])
       if (attrs.templateUrl) {
         return "<ng-include src=\"'" + attrs.templateUrl + "'\"></ng-include>";
       } else {
-        return '<ion-list> <ion-item ng-click=showItems($event)> {{text}} <span class=item-note>{{noteText}} <img class={{noteImgClass}} ng-if="noteImg != null" src="{{noteImg}}"/> </span> </ion-item> </ion-list>';
+        return '<label ng-click=showItems($event) class="item item-input item-floating-label"><span class="input-label select-label {{inputLabelCss}}">{{label}}</span><div class="{{textCss}}">{{text}}</div></label>'
+        // <ion-item ng-click=showItems($event)> <ion-label floating>{{label}}</ion-label> {{text}} <span class=item-note>{{noteText}} <img class={{noteImgClass}} ng-if="noteImg != null" src="{{noteImg}}"/> </span> </ion-item>';
       }
     },
 
@@ -40,8 +41,9 @@ angular.module("ionic-fancy-select", ["ionic"])
       scope.headerText = attrs.headerText || '';
 
       // Text displayed on label
+      scope.label = attrs.label || '';
       scope.text = attrs.text || '';
-      scope.defaultText = attrs.text || '';
+      scope.defaultText = attrs.text || attrs.label;
 
       // Data binding properties
       scope.checkedProperty = attrs.checkedProperty || "checked";
@@ -136,6 +138,15 @@ angular.module("ionic-fancy-select", ["ionic"])
       
       // Raised by watch when the value changes
       scope.onValueChanged = function(newValue, oldValue) {
+        if(newValue.length > 0)
+        {
+          scope.inputLabelCss = "has-input";
+          scope.textCss = "select-text";
+        }
+        else {
+          scope.inputLabelCss = "";
+          scope.textCss = "select-placeholder";
+        }
         scope.text = scope.getText(newValue);
         
         // Notify subscribers that the value has changed
