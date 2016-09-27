@@ -137,9 +137,7 @@ angular.module("ionic-fancy-select", ["ionic"])
       };
       
       // Raised by watch when the value changes
-      scope.onValueChanged = function(newValue, oldValue) {
-       
-        console.log(newValue);
+      scope.onValueChanged = function(newValue, oldValue) {       
         if(newValue != "")
         {
           scope.inputLabelCss = "has-input";
