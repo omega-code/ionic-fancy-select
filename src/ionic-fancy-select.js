@@ -37,13 +37,13 @@ angular.module("ionic-fancy-select", ["ionic"])
       scope.multiSelect = attrs.multiSelect === 'true' ? true : false;
       scope.allowEmpty = attrs.allowEmpty === 'false' ? false : true;
 
-      // Header used in ion-header-bar
-      scope.headerText = attrs.headerText || '';
-
       // Text displayed on label
       scope.label = attrs.label || '';
       scope.text = attrs.text || '';
       scope.defaultText = attrs.text || '';
+
+      // Header used in ion-header-bar
+      scope.headerText = attrs.headerText || 'Select ' + scope.label;
 
       // Data binding properties
       scope.checkedProperty = attrs.checkedProperty || "checked";
