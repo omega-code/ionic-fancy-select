@@ -43,7 +43,11 @@ angular.module("ionic-fancy-select", ["ionic"])
       scope.defaultText = attrs.text || '';
 
       // Header used in ion-header-bar
-      scope.headerText = attrs.headerText || 'Select ' + scope.label;
+      scope.headerText = attrs.headerText || 'Select ' + (scope.label || ' an option');
+
+      // css initialization
+      scope.inputLabelCss = "";
+      scope.textCss = "select-placeholder";
 
       // Data binding properties
       scope.checkedProperty = attrs.checkedProperty || "checked";
