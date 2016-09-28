@@ -18,7 +18,7 @@ angular.module("ionic-fancy-select", ["ionic"])
       if (attrs.templateUrl) {
         return "<ng-include src=\"'" + attrs.templateUrl + "'\"></ng-include>";
       } else {
-        return '<label ng-click=showItems($event) class="item item-input item-floating-label"><span class="input-label select-label {{inputLabelCss}}">{{label}}</span><div class="{{textCss}}">{{text || label}}</div></label>'
+        return '<label ng-click=showItems($event) class="item item-input item-floating-label"><span class="input-label select-label {{inputLabelCss}}">{{label}}</span><div class="{{textCss}}">{{text || placeholder}}</div></label>'
         // <ion-item ng-click=showItems($event)> <ion-label floating>{{label}}</ion-label> {{text}} <span class=item-note>{{noteText}} <img class={{noteImgClass}} ng-if="noteImg != null" src="{{noteImg}}"/> </span> </ion-item>';
       }
     },
@@ -41,6 +41,7 @@ angular.module("ionic-fancy-select", ["ionic"])
       scope.label = attrs.label || '';
       scope.text = attrs.text || '';
       scope.defaultText = attrs.text || '';
+      scope.placeholder = attrs.placeholder || '';
 
       // Header used in ion-header-bar
       scope.headerText = attrs.headerText || 'Select ' + (scope.label || ' an option');
