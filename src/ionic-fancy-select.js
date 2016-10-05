@@ -18,7 +18,7 @@ angular.module("ionic-fancy-select", ["ionic"])
       if (attrs.templateUrl) {
         return "<ng-include src=\"'" + attrs.templateUrl + "'\"></ng-include>";
       } else {
-        return '<label ng-click=showItems($event) class="item item-input item-stacked-label"><span class="input-label select-label {{inputLabelCss}}">{{label}}</span><div class="{{textCss}}">{{text || placeholder}}</div></label>'
+        return '<label class="item item-input item-stacked-label"><span class="input-label select-label {{inputLabelCss}}">{{label}}</span><input type="text" placeholder="{{placeholder}}" ng-model="text" auto-advance ng-click="showItems($event)"></label>'
         // <ion-item ng-click=showItems($event)> <ion-label floating>{{label}}</ion-label> {{text}} <span class=item-note>{{noteText}} <img class={{noteImgClass}} ng-if="noteImg != null" src="{{noteImg}}"/> </span> </ion-item>';
       }
     },
@@ -33,6 +33,8 @@ angular.module("ionic-fancy-select", ["ionic"])
 
     // Hook up the directive
     link: function(scope, element, attrs) {
+      var inputField = null;
+
       // Default values
       scope.multiSelect = attrs.multiSelect === 'true' ? true : false;
       scope.allowEmpty = attrs.allowEmpty === 'false' ? false : true;
@@ -42,6 +44,7 @@ angular.module("ionic-fancy-select", ["ionic"])
       scope.text = attrs.text || '';
       scope.defaultText = attrs.text || '';
       scope.placeholder = attrs.placeholder || '';
+      //scope.model = { value: scope.value }
 
       // Header used in ion-header-bar
       scope.headerText = attrs.headerText || 'Select ' + (scope.label || ' an option');
@@ -154,7 +157,9 @@ angular.module("ionic-fancy-select", ["ionic"])
         }
 
         scope.text = scope.getText(newValue);
-        console.log(scope.text);
+
+        // trigger enter key so that auto-advance works.
+        // inputField.trigger(jQuery.Event('keypress', {which: 13}));
         
         // Notify subscribers that the value has changed
         scope.valueChangedCallback({value: newValue});
@@ -162,6 +167,7 @@ angular.module("ionic-fancy-select", ["ionic"])
 
       // Shows the list
       scope.showItems = function(event) {
+        inputField = event.target;
         event.preventDefault(); // Prevent the event from bubbling
         
         // For multi-select, make sure we have an up-to-date list of checked items
@@ -208,6 +214,7 @@ angular.module("ionic-fancy-select", ["ionic"])
         }
 
         scope.hideItems();
+        scope.$broadcast('itemSelected', {});
       };
       
       // Watch the value property, as this is used to build the text
