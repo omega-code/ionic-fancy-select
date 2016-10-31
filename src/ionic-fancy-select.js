@@ -48,6 +48,7 @@ angular.module("ionic-fancy-select", ["ionic"])
       // css initialization
       scope.inputLabelCss = "";
       scope.textCss = "select-placeholder";
+      scope.selectInputCss = "select-input-visible";
 
       // Data binding properties
       scope.checkedProperty = attrs.checkedProperty || "checked";
@@ -146,10 +147,12 @@ angular.module("ionic-fancy-select", ["ionic"])
         {
           scope.inputLabelCss = "has-input";
           scope.textCss = "select-text";
+          // scope.selectInputCss = "select-input-visible"
         }
         else {
           scope.inputLabelCss = "";
           scope.textCss = "select-placeholder";
+          // scope.selectInputCss = "select-input-invisible"
         }
 
         scope.text = scope.getText(newValue);
@@ -168,6 +171,8 @@ angular.module("ionic-fancy-select", ["ionic"])
 
       // Shows the list
       scope.showItems = function(event) {
+        scope.selectInputCss = 'select-input-invisible';
+
         inputField = event.target;
         event.preventDefault(); // Prevent the event from bubbling
         
@@ -212,6 +217,11 @@ angular.module("ionic-fancy-select", ["ionic"])
           // Just use the current item
           scope.value = scope.getItemValue(item);
 
+        }
+
+        if(scope.value.length != 0)
+        {
+          scope.selectInputCss = 'select-input-visible';
         }
 
         scope.hideItems();
