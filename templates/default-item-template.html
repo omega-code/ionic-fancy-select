@@ -1,0 +1,13 @@
+<label class="item item-input item-stacked-label ng-class:{'has-error': model.$error.messages}">
+	<span class="input-label select-label {{inputLabelCss}}">{{label}}</span>
+	<span class='pull-right required-indicator' ng-if='required'>*</span>
+
+	<input type="text" placeholder="{{placeholder}}" ng-model="text" auto-advance ng-click="showItems($event)">
+	<!-- <input type="text" placeholder="{{placeholder}}" ng-model="text" auto-advance ng-click="showItems($event)"> -->
+
+	<span type='text' name='{{field}}' ng-model="model" validate-input />
+</label>
+
+<div class="error-messages ng-class:{'hide': model.$error.messages == null}">    
+    <div ng-repeat="m in model.$error.messages">{{m}}</div>
+</div>

@@ -10,23 +10,16 @@ angular.module("ionic-fancy-select", ["ionic"])
   return {
     // Only use as <fancy-select> tag
     restrict: "E",
-
-    /* The default template
-     * this uses the default "id" and "text" properties
-     */
-    template: function(element, attrs) {
-      if (attrs.templateUrl) {
-        return "<ng-include src=\"'" + attrs.templateUrl + "'\"></ng-include>";
-      } else {
-        return '<label class="item item-input item-stacked-label"><span class="input-label select-label {{inputLabelCss}}">{{label}}</span><input type="text" placeholder="{{placeholder}}" ng-model="text" auto-advance ng-click="showItems($event)"></label>'
-        // <ion-item ng-click=showItems($event)> <ion-label floating>{{label}}</ion-label> {{text}} <span class=item-note>{{noteText}} <img class={{noteImgClass}} ng-if="noteImg != null" src="{{noteImg}}"/> </span> </ion-item>';
-      }
-    },
+    templateUrl: 'bower_components/ionic-fancy-select/templates/default-item-template.html',
 
     // The default attribute set
     scope: {
       items: "=", // Needs to have a value
       value: "=", // Needs to have a value
+      form: "=",
+      field: "@",
+      validateSelect: "=",
+      required: "=",
       valueChangedCallback: "&valueChanged", // The callback used to signal that the value has changed
       getCustomTextCallback: "&getCustomText" // The callback used to get custom text based on the selected value
     },
@@ -44,6 +37,9 @@ angular.module("ionic-fancy-select", ["ionic"])
       scope.text = attrs.text || '';
       scope.defaultText = attrs.text || '';
       scope.placeholder = attrs.placeholder || '';
+      if(scope.form){
+        scope.model = scope.form[scope.field];
+      }
       //scope.model = { value: scope.value }
 
       // Header used in ion-header-bar
@@ -157,6 +153,11 @@ angular.module("ionic-fancy-select", ["ionic"])
         }
 
         scope.text = scope.getText(newValue);
+        
+        if(scope.text != null && scope.text != "")
+        {
+          scope.model = scope.text
+        }
 
         // trigger enter key so that auto-advance works.
         // inputField.trigger(jQuery.Event('keypress', {which: 13}));
