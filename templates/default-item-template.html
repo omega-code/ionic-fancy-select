@@ -2,7 +2,7 @@
 	<span class="input-label select-label {{inputLabelCss}}">{{label}}</span>
 	<span class='pull-right required-indicator' ng-if='required'>*</span>
 
-	<input type="text" placeholder="{{placeholder}}" ng-model="text" auto-advance ng-click="showItems($event)">
+	<input type="text" class='fancy-select-input' placeholder="{{placeholder}}" ng-model="text" auto-advance ng-click="showItems($event)">
 	<!-- <input type="text" placeholder="{{placeholder}}" ng-model="text" auto-advance ng-click="showItems($event)"> -->
 
 	<span type='text' name='{{field}}' ng-model="model" validate-input />
