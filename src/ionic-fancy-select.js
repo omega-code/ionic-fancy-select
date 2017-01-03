@@ -30,6 +30,7 @@ angular.module("ionic-fancy-select", ["ionic"])
 
       // Default values
       scope.multiSelect = attrs.multiSelect === 'true' ? true : false;
+      scope.maxSelectCount = attrs.maxSelectCount || 1000;
       scope.allowEmpty = attrs.allowEmpty === 'false' ? false : true;
 
       // Text displayed on label
@@ -53,8 +54,10 @@ angular.module("ionic-fancy-select", ["ionic"])
       // Data binding properties
       scope.checkedProperty = attrs.checkedProperty || "checked";
       scope.iconProperty = attrs.iconProperty || "icon";
-      scope.textProperty = attrs.textProperty || "text";
+      scope.textProperty = attrs.textProperty || "name";
+      scope.textcategoryProperty = attrs.textcategoryProperty || "key";
       scope.valueProperty = attrs.valueProperty || "id";
+      scope.subitemProperty = attrs.subitemProperty || "items";
 
       // The modal properties
       scope.modalTemplateUrl = attrs.modalTemplateUrl;
@@ -99,9 +102,17 @@ angular.module("ionic-fancy-select", ["ionic"])
       scope.getItemText = function(item) {
         return scope.textProperty ? item[scope.textProperty] : item;
       };
+	  
+    scope.getCategoryText = function (item) {
+          return scope.textcategoryProperty ? item[scope.textcategoryProperty] : item;
+      };
       
       scope.getItemValue = function(item) {
         return scope.valueProperty ? item[scope.valueProperty] : item;
+      };
+	  
+   scope.getSubItems = function (item) {
+          return scope.subitemProperty ? item[scope.subitemProperty] : item;
       };
       
       // Gets the text for the specified values
@@ -117,14 +128,18 @@ angular.module("ionic-fancy-select", ["ionic"])
         var text = "";
         if (temp.length && temp[0]) {
           // Concatenate the list of selected items
-          angular.forEach(scope.items, function(item, key) {
-            for (var i = 0; i < temp.length; i++) {
-              if (scope.getItemValue(item) == temp[i]) {
-                text += (text.length ? ", " : "") + scope.getItemText(item);
-                break;
-              }
-            }
-          });
+		  //Changed for subitems
+           angular.forEach(scope.items, function(i, keyUp) {
+                angular.forEach(scope.getSubItems(i), function (item, key) {
+                for (var i = 0; i < temp.length; i++) {
+                  if (scope.getItemValue(item) == temp[i]) {
+                    text += (text.length ? ", " : "") + scope.getItemText(item);
+                    break;
+                  }
+                }
+                });
+            });
+
           
         } else {
           // Just use the default text
@@ -181,7 +196,8 @@ angular.module("ionic-fancy-select", ["ionic"])
           // Clone the list of values, as we'll splice them as we go through to reduce loops
           var values = scope.value ? angular.copy(scope.value) : [];
           
-          angular.forEach(scope.items, function(item, key) {
+           angular.forEach(scope.items, function (i, keyUp) {
+              angular.forEach(scope.getSubItems(i), function (item, key) {
             // Not checked by default
             item[scope.checkedProperty] = false;
             
@@ -193,7 +209,8 @@ angular.module("ionic-fancy-select", ["ionic"])
                 break;
               }
             }
-          });
+           });
+		  });
         }
 
         scope.modal.show();
@@ -206,12 +223,13 @@ angular.module("ionic-fancy-select", ["ionic"])
           scope.value = [];
 
           if (scope.items) {
-            angular.forEach(scope.items, function(item, key) {
-              if (item[scope.checkedProperty]) {
-                scope.value[scope.value.length] = scope.getItemValue(item);
-              }
-            });
-          }
+              angular.forEach(scope.items, function(i, keyUp) {
+                  angular.forEach(scope.getSubItems(i), function (item, key) {
+                  if (item[scope.checkedProperty]) {
+                    scope.value[scope.value.length] = scope.getItemValue(item);
+                  }
+                });
+              });
 
         } else {
           // Just use the current item
